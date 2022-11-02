@@ -1,0 +1,26 @@
+# Package Files 
+*.jar
+*.war
+*.rar
+*.zip
+
+# Log file
+*.log
+
+# Compiled class file
+*.class
+
+# Windows thumbnail cache files
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+
+*.properties
+*.sql
+.classpath
+.project
+bin/
+target/
+logs/
+.settings/
+scripts/

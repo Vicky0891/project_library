@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import by.vicky.project_library.models.Book;
 import by.vicky.project_library.models.Person;
@@ -101,6 +102,25 @@ public class BookController {
 	public String assign(@ModelAttribute("person") Person person, @PathVariable("id") int id) {
 		bookService.assign(id, person);
 		return "redirect:/books/" + id;
+	}
+
+	@GetMapping("/search")
+	public String searchForm() {
+		return "books/search";
+	}
+
+	@PostMapping("/search")
+	public String searchBook(@RequestParam String name, Model model) {
+		Book book = bookService.findByNameStartingWith(name);
+		if (book != null) {
+			model.addAttribute("book", book);
+			if (book.getPersonId() != null) {
+				model.addAttribute("owner", personService.findOne(book.getPersonId()));
+			}
+		} else {
+			model.addAttribute("error", "Error");
+		}
+		return "books/search";
 	}
 
 }

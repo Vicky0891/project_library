@@ -8,7 +8,7 @@ import by.vicky.project_library.models.Book;
 
 public interface BookRepository extends JpaRepository<Book, Integer> {
 
-	List<Book> findByNameStartingWith(String startingWith);
+	Book findByNameStartingWith(String startingWith);
 
 	List<Book> findByName(String name);
 

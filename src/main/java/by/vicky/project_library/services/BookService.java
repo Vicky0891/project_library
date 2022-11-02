@@ -47,8 +47,9 @@ public class BookService {
 		bookRepository.deleteById(id);
 	}
 
-	public List<Book> findByNameStartingWith(String startingWith) {
-		return bookRepository.findByNameStartingWith(startingWith);
+	public Book findByNameStartingWith(String startingWith) {
+		Book book = bookRepository.findByNameStartingWith(startingWith);
+		return book;
 	}
 
 	public List<Book> findByPersonId(int personId) {
@@ -68,5 +69,5 @@ public class BookService {
 		book.setPersonId(assignedPerson.getId());
 		bookRepository.save(book);
 	}
-
+	
 }

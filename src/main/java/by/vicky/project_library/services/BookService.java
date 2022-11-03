@@ -1,5 +1,7 @@
 package by.vicky.project_library.services;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +57,21 @@ public class BookService {
 	}
 
 	public List<Book> findByPersonId(int personId) {
-		return bookRepository.findByPersonId(personId);
+		List<Book> books = bookRepository.findByPersonId(personId);
+		List<Book> newBooks = new ArrayList<>();
+		for (Book book : books) {
+
+			Long assignedDate = book.getAssignAt().getTime();
+			Long moment = new Date().getTime();
+			Long delayInDays = (moment - assignedDate) / 86400000;
+			if (delayInDays > 10) {
+				book.setDelay(true);
+			} else {
+				book.setDelay(false);
+			}
+			newBooks.add(book);
+		}
+		return newBooks;
 	}
 
 	@Transactional
@@ -69,23 +85,20 @@ public class BookService {
 	public void assign(int id, Person assignedPerson) {
 		Book book = bookRepository.findById(id).orElse(null);
 		book.setPersonId(assignedPerson.getId());
+		book.setAssignAt(new Date());
 		bookRepository.save(book);
 	}
 
 	public List<Book> findAll(Integer page, Integer itemsPerPage) {
 		return bookRepository.findAll(PageRequest.of(page, itemsPerPage)).getContent();
 	}
-//
-//	public List<Book> findAll(Sort sort) {
-//		return bookRepository.findAll(Sort.by("year"));
-//	}
 
 	public List<Book> findAll(Integer page, Integer itemsPerPage, boolean sort) {
-		if(sort) {
+		if (sort) {
 			return bookRepository.findAll(PageRequest.of(page, itemsPerPage, Sort.by("year"))).getContent();
 		} else {
 			return bookRepository.findAll(PageRequest.of(page, itemsPerPage)).getContent();
-			
+
 		}
 	}
 

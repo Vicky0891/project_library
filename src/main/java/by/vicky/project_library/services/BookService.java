@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,5 +71,22 @@ public class BookService {
 		book.setPersonId(assignedPerson.getId());
 		bookRepository.save(book);
 	}
-	
+
+	public List<Book> findAll(Integer page, Integer itemsPerPage) {
+		return bookRepository.findAll(PageRequest.of(page, itemsPerPage)).getContent();
+	}
+//
+//	public List<Book> findAll(Sort sort) {
+//		return bookRepository.findAll(Sort.by("year"));
+//	}
+
+	public List<Book> findAll(Integer page, Integer itemsPerPage, boolean sort) {
+		if(sort) {
+			return bookRepository.findAll(PageRequest.of(page, itemsPerPage, Sort.by("year"))).getContent();
+		} else {
+			return bookRepository.findAll(PageRequest.of(page, itemsPerPage)).getContent();
+			
+		}
+	}
+
 }

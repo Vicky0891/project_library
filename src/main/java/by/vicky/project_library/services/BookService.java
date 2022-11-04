@@ -42,7 +42,9 @@ public class BookService {
 
 	@Transactional
 	public void update(int id, Book updatedBook) {
+		Book bookToBeUpdated = bookRepository.findById(id).get();
 		updatedBook.setId(id);
+		updatedBook.setPersonId(bookToBeUpdated.getPersonId());
 		bookRepository.save(updatedBook);
 	}
 
@@ -76,17 +78,16 @@ public class BookService {
 
 	@Transactional
 	public void release(int id) {
-		Book book = bookRepository.findById(id).orElse(null);
+		Book book = bookRepository.findById(id).get();
 		book.setPersonId(null);
-		bookRepository.save(book);
+		book.setAssignAt(null);
 	}
 
 	@Transactional
 	public void assign(int id, Person assignedPerson) {
-		Book book = bookRepository.findById(id).orElse(null);
+		Book book = bookRepository.findById(id).get();
 		book.setPersonId(assignedPerson.getId());
 		book.setAssignAt(new Date());
-		bookRepository.save(book);
 	}
 
 	public List<Book> findAll(Integer page, Integer itemsPerPage) {
